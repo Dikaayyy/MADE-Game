@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -8,13 +10,22 @@ plugins {
 
 android {
     namespace = "com.example.core"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
 
+        val properties=Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "RAWG_API_KEY", "\"${properties.getProperty("RAWG_API_KEY")}\"")
+
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
     }
 
     buildTypes {
