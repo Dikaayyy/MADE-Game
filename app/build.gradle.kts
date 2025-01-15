@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.made"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.made"
@@ -17,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
@@ -39,8 +43,6 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":favorite"))
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
@@ -55,4 +57,11 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation (libs.androidx.fragment.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx)
 }
