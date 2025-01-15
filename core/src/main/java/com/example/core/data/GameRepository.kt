@@ -1,6 +1,7 @@
 package com.example.core.data
 
 import com.example.core.data.local.LocalDataSource
+import com.example.core.data.local.entity.GameEntity
 import com.example.core.data.remote.RemoteDataSource
 import com.example.core.data.remote.network.ApiResponse
 import com.example.core.data.remote.response.GameResponse
@@ -61,35 +62,69 @@ class GameRepository @Inject constructor(
     override fun getDetailGame(id: Int): Flow<Resource<Game>> = flow {
         emit(Resource.Loading())
         localDataSource.getGameById(id).collect { dbGame ->
-            val gameDomain = Game(
-                id = dbGame.id,
-                name = dbGame.name,
-                rating = dbGame.rating,
-                released = dbGame.released,
-                backgroundImage = dbGame.backgroundImage,
-                description = dbGame.description,
-                isFavorite = dbGame.isFavorite
-            )
+            when (dbGame) {
+                null -> {
+                    // Game not found in local DB, fetch from remote
+                    remoteDataSource.getDetailGame(id).collect { response ->
+                        when (response) {
+                            is ApiResponse.Success -> {
+                                val responseGame = response.data
+                                // Create new GameEntity
+                                val gameEntity = GameEntity(
+                                    id = id,
+                                    name = responseGame.name,
+                                    rating = responseGame.rating,
+                                    released = responseGame.released,
+                                    backgroundImage = responseGame.backgroundImage,
+                                    description = responseGame.description ?: "",
+                                    isFavorite = false
+                                )
+                                // Save to local DB
+                                localDataSource.insertGames(listOf(gameEntity))
 
-            if (dbGame.description == "") {
-                remoteDataSource.getDetailGame(id).collect { response ->
-                    when (response) {
-                        is ApiResponse.Success -> {
-                            val responseGame = response.data
-                            dbGame.description = responseGame.description
-                            localDataSource.updateGame(dbGame)
-
-                            gameDomain.description = responseGame.description
-                            emit(Resource.Success(gameDomain))
+                                val gameDomain = DataMapper.mapEntityToDomain(gameEntity)
+                                emit(Resource.Success(gameDomain))
+                            }
+                            is ApiResponse.Error -> {
+                                emit(Resource.Error(response.errorMessage))
+                            }
+                            else -> {}
                         }
-                        is ApiResponse.Error -> {
-                            emit(Resource.Error(response.errorMessage))
-                        }
-                        else -> {}
                     }
                 }
-            } else {
-                emit(Resource.Success(gameDomain))
+                else -> {
+                    // Game found in local DB
+                    val gameDomain = Game(
+                        id = dbGame.id,
+                        name = dbGame.name,
+                        rating = dbGame.rating,
+                        released = dbGame.released,
+                        backgroundImage = dbGame.backgroundImage,
+                        description = dbGame.description,
+                        isFavorite = dbGame.isFavorite
+                    )
+
+                    if (dbGame.description.isEmpty()) {
+                        remoteDataSource.getDetailGame(id).collect { response ->
+                            when (response) {
+                                is ApiResponse.Success -> {
+                                    val responseGame = response.data
+                                    dbGame.description = responseGame.description
+                                    localDataSource.updateGame(dbGame)
+
+                                    gameDomain.description = responseGame.description
+                                    emit(Resource.Success(gameDomain))
+                                }
+                                is ApiResponse.Error -> {
+                                    emit(Resource.Error(response.errorMessage))
+                                }
+                                else -> {}
+                            }
+                        }
+                    } else {
+                        emit(Resource.Success(gameDomain))
+                    }
+                }
             }
         }
     }

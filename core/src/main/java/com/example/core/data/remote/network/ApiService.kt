@@ -17,6 +17,6 @@ interface ApiService {
     @GET("games/{id}")
     suspend fun getGameDetail(
         @Path("id") id: Int,
-        @Header("key") apiKey: String = BuildConfig.RAWG_API_KEY
+        @Query("key") apiKey: String = BuildConfig.RAWG_API_KEY
     ): GameDetailResponse
 }

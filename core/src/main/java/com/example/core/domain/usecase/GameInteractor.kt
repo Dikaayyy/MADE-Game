@@ -4,8 +4,9 @@ import com.example.core.data.Resource
 import com.example.core.domain.model.Game
 import com.example.core.domain.repository.IGameRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GameInteractor(private val gameRepository: IGameRepository) : GameUseCase {
+class GameInteractor @Inject constructor(private val gameRepository: IGameRepository) : GameUseCase {
     override fun getAllGames(): Flow<Resource<List<Game>>> = gameRepository.getAllGames()
 
     override fun getDetailGame(id: Int): Flow<Resource<Game>> = gameRepository.getDetailGame(id)

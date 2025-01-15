@@ -8,7 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.core.R
 import com.example.core.domain.model.Game
 
-class GameAdapter(private var games: List<Game>) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
+class GameAdapter(private val onClick: (Game) -> Unit) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
+
+    private val games = mutableListOf<Game>()
+
+    fun updateGames(newGames: List<Game>) {
+        games.clear()
+        games.addAll(newGames)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_game, parent, false)
@@ -17,25 +25,21 @@ class GameAdapter(private var games: List<Game>) : RecyclerView.Adapter<GameAdap
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
         val game = games[position]
-        holder.tvGameTitle.text = game.name
-        holder.tvGameRating.text = "Rating: ${game.rating}"
-        holder.tvGameReleased.text = "Released: ${game.released}"
-        holder.tvGameDescription.text = game.description
-        holder.tvGameIsFavorite.text = if (game.isFavorite) "Favorite" else "Not Favorite"
+        holder.bind(game)
     }
 
     override fun getItemCount(): Int = games.size
 
-    fun updateGames(newGames: List<Game>) {
-        games = newGames
-        notifyDataSetChanged()
-    }
+    inner class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvGameTitle: TextView = itemView.findViewById(R.id.tvGameTitle)
+        private val tvGameRating: TextView = itemView.findViewById(R.id.tvGameRating)
+        private val tvGameReleased: TextView = itemView.findViewById(R.id.tvGameReleased)
 
-    class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvGameTitle: TextView = itemView.findViewById(R.id.tvGameTitle)
-        val tvGameRating: TextView = itemView.findViewById(R.id.tvGameRating)
-        val tvGameReleased: TextView = itemView.findViewById(R.id.tvGameReleased)
-        val tvGameDescription: TextView = itemView.findViewById(R.id.tvGameDescription)
-        val tvGameIsFavorite: TextView = itemView.findViewById(R.id.tvGameIsFavorite)
+        fun bind(game: Game) {
+            tvGameTitle.text = game.name
+            tvGameRating.text = "Rating: ${game.rating}"
+            tvGameReleased.text = "Released: ${game.released}"
+            itemView.setOnClickListener { onClick(game) }
+        }
     }
 }
