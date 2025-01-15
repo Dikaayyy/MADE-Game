@@ -4,24 +4,19 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.hilt.android)
 }
-
 android {
-    namespace = "com.example.favorite"
-    compileSdk = 35
+    namespace = "com.example.favorites"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-        viewBinding = true
-        dataBinding = true
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
+
         }
     }
 }
@@ -34,7 +29,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 

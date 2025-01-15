@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "MADE"
 include(":app")
 include(":core")
-include(":favorite")
+include(":favorites")

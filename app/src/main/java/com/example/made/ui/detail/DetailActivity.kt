@@ -1,6 +1,7 @@
 package com.example.made.ui.detail
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,15 +28,17 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.getGameDetail(gameId).observe(this) { resource ->
             when (resource) {
                 is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
                     resource.data?.let { game ->
                         populateGameDetails(game)
                     } ?: showError("Game details not found")
                 }
                 is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
                     showError(resource.message ?: "An unknown error occurred")
                 }
                 is Resource.Loading -> {
-                    // Handle loading state if needed
+                    binding.progressBar.visibility = View.VISIBLE
                 }
             }
         }

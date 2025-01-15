@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.domain.model.Game
 import com.example.core.ui.GameAdapter
+import com.example.made.R
 import com.example.made.databinding.FragmentHomeBinding
 import com.example.made.ui.detail.DetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +46,10 @@ class HomeFragment : Fragment() {
                 gameAdapter.updateGames(games)
             }
         }
+
+//        binding.buttonFavorite.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+//        }
     }
 
     private fun navigateToDetail(game: Game) {

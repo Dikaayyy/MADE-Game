@@ -1,0 +1,19 @@
+<!-- res/layout/fragment_favorite.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!-- Declare your ViewModel or other data binding variables here -->
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".FavoriteFragment">
+
+        <!-- Add your UI components here -->
+
+    </LinearLayout>
+</layout>

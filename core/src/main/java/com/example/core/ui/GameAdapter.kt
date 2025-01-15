@@ -3,8 +3,10 @@ package com.example.core.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.core.R
 import com.example.core.domain.model.Game
 
@@ -31,11 +33,15 @@ class GameAdapter(private val onClick: (Game) -> Unit) : RecyclerView.Adapter<Ga
     override fun getItemCount(): Int = games.size
 
     inner class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val ivGameImage: ImageView = itemView.findViewById(R.id.ivGameImage)
         private val tvGameTitle: TextView = itemView.findViewById(R.id.tvGameTitle)
         private val tvGameRating: TextView = itemView.findViewById(R.id.tvGameRating)
         private val tvGameReleased: TextView = itemView.findViewById(R.id.tvGameReleased)
 
         fun bind(game: Game) {
+            Glide.with(itemView.context)
+                .load(game.backgroundImage)
+                .into(ivGameImage)
             tvGameTitle.text = game.name
             tvGameRating.text = "Rating: ${game.rating}"
             tvGameReleased.text = "Released: ${game.released}"
