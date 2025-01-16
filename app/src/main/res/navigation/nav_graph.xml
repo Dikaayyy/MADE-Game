@@ -12,8 +12,8 @@
             android:id="@+id/action_homeFragment_to_detailActivity"
             app:destination="@id/detailActivity" />
         <action
-            android:id="@+id/action_homeFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
+            android:id="@+id/action_homeFragment_to_favoriteActivity"
+            app:destination="@id/favoriteActivity" />
     </fragment>
 
     <activity
@@ -25,10 +25,9 @@
             app:argType="integer" />
     </activity>
 
-    <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.example.favorites.FavoriteFragment"
-        app:moduleName="favorites"
+    <activity
+        android:id="@+id/favoriteActivity"
+        android:name="com.example.favorites.FavoriteActivity"
         android:label="Favorite" />
 
 </navigation>

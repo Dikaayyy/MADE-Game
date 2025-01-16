@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.buttonFavorite.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_favoriteActivity)
         }
     }
 
