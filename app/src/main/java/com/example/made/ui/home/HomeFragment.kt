@@ -47,9 +47,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-//        binding.buttonFavorite.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
-//        }
+        binding.buttonFavorite.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+        }
     }
 
     private fun navigateToDetail(game: Game) {
